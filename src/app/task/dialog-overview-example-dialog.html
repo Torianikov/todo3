@@ -1,0 +1,24 @@
+<h1 mat-dialog-title>Hi </h1>
+<div mat-dialog-content>
+
+  <mat-form-field class="example-full-width">
+    <mat-label>New task</mat-label>
+    <input matInput placeholder="Add new task" [(ngModel)]='data.text'>
+  </mat-form-field>
+
+  <mat-radio-group aria-label="Select an option" [(ngModel)]='data.selectRankExport'>
+    <mat-radio-button value="not_performed">Not Performed</mat-radio-button>
+    <mat-radio-button value="doing">Doing</mat-radio-button>
+    <mat-radio-button value="done">done</mat-radio-button>
+  </mat-radio-group>
+
+</div>
+<div mat-dialog-actions>
+  <!-- <button mat-button (click)="onNoClick()">No Thanks</button> -->
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+</div>
+
+
+<!-- Copyright 2021 Google LLC. All Rights Reserved.
+    Use of this source code is governed by an MIT-style license that
+    can be found in the LICENSE file at http://angular.io/license -->
