@@ -1,9 +1,11 @@
 
 import { Component, OnInit, Inject  } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { addTask, clear, deleteTask, editTask, taskSelector, executionSelector } from '../reducers/task';
+import { addTask, clear, deleteTask, editTask, taskSelector, } from '../reducers/task';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {FormGroup, FormControl} from '@angular/forms'
+import { Observable } from 'rxjs';
+import {Task} from '../model/tast'
 
 export interface DialogData {
   text: string;
@@ -29,29 +31,29 @@ export class TaskComponent implements OnInit {
   vibor: string;
   selectRankExport: string;
   buk: string
-  
+
   textNewTask: string;
 
-  arrTask$ = this.store.select(taskSelector);
-  execuion$ = this.store.select(executionSelector);
+  arrTask$: Observable<Task[]> = this.store.select(taskSelector);
+  // execuion$ = this.store.select(executionSelector);
 
   execuionClient: string;
 
   constructor(private store: Store, public dialog: MatDialog ) { }
 
-  
+
   openDialog(): void {
-    
+
     const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
       width: '550px',
       data: {text: this.text, vibor:this.vibor, selectRankExport: this.selectRankExport }
-    
+
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      
+
       this.store.dispatch(addTask({textNewTask: result.text, executionClient: result.selectRankExport }));
-    
+
     });
   }
 
@@ -66,24 +68,24 @@ export class TaskComponent implements OnInit {
   }
 
   deleteTask(index){
-    
+
     this.store.dispatch(deleteTask({index: index}));
-   
+
   }
 
-  edit(index, item, buk){
-    
-    // let upadateExecution;
+  edit(index, item, b1, b2, b3){
 
-    // if(b1) upadateExecution = 'not_performed';
-    // if(b2) upadateExecution = 'doing';
-    // if(b3) upadateExecution = 'done';
-    console.log(buk);
+    let upadateExecution;
 
-    this.store.dispatch(editTask({index:index, upadateTask: item, upadateExecution: buk  }))
+    if(b1) upadateExecution = 'not_performed';
+    if(b2) upadateExecution = 'doing';
+    if(b3) upadateExecution = 'done';
+    // console.log(buk);
+
+    this.store.dispatch(editTask({index:index, upadateTask: item, upadateExecution: upadateExecution  }))
   }
 
-  
+
 
 }
 
