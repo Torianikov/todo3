@@ -37,11 +37,13 @@ export const taskReducer = createReducer(
 
     })),
     on(deleteTask, (state, {index}) =>{
-      let arr = [...state.todoList]
-      // arr[]
-      return{
+        
+        let indexNewArr = 0  
+        let arr = [...state.todoList].filter((item) => item.id !== index);
+    //   .map(item => item.id = indexNewArr + 1 );
+        return{
           ...state,
-        todoList:  state.todoList.slice(0, index).concat(state.todoList.slice(index + 1, state.todoList.length)),
+        todoList:  arr
 
     }}),
     on(editTask, (state,{index, upadateTask, upadateExecution}) => {

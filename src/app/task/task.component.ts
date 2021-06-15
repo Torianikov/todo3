@@ -1,11 +1,11 @@
-
 import { Component, OnInit, Inject  } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { addTask, clear, deleteTask, editTask, taskSelector, } from '../reducers/task';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {FormGroup, FormControl} from '@angular/forms'
+import {FormGroup, FormControl, FormArray, FormBuilder} from '@angular/forms'
 import { Observable } from 'rxjs';
 import {Task} from '../model/tast'
+
 
 export interface DialogData {
   text: string;
@@ -22,10 +22,17 @@ export interface DialogData {
 export class TaskComponent implements OnInit {
 
   // execuionForm = new FormGroup({
-  //   a: new FormControl(''),
-  //   b: new FormControl(''),
-  //   c: new FormControl('')
+  //   not_performed: new FormControl(),
   // });
+
+  // aaaaa = new FormControl();
+
+  // exe_arr= new FormArray();
+
+  modifiedToDo: FormGroup;
+
+  // modifiedExecution = new FormControl();
+
 
   text: string;
   vibor: string;
@@ -35,11 +42,20 @@ export class TaskComponent implements OnInit {
   textNewTask: string;
 
   arrTask$: Observable<Task[]> = this.store.select(taskSelector);
-  // execuion$ = this.store.select(executionSelector);
 
   execuionClient: string;
 
-  constructor(private store: Store, public dialog: MatDialog ) { }
+  constructor(private store: Store, public dialog: MatDialog, private fb: FormBuilder ) { 
+    // this.modifiedToDo = this.fb.group({
+    //   modifiedText: '',
+    //   modifiedExecution: this.fb.array([]), 
+    // });
+  }
+
+// get modifiedExecution() : FormArray {
+//   return this.modifiedToDo.get("modifiedExecution") as FormArray
+// }
+
 
 
   openDialog(): void {
@@ -57,8 +73,15 @@ export class TaskComponent implements OnInit {
     });
   }
 
+  // what(){
+  //   console.log(this.execuionForm.value);
+  //   console.log(this.aaaaa.value)
+  // }
+
   ngOnInit(): void {
+
   }
+
 
   clear(){
 
@@ -76,13 +99,17 @@ export class TaskComponent implements OnInit {
   edit(index, item, b1, b2, b3){
 
     let upadateExecution;
-
+    console.log(b1 + ' ' + b2 + ' ' + b3)
     if(b1) upadateExecution = 'not_performed';
     if(b2) upadateExecution = 'doing';
     if(b3) upadateExecution = 'done';
-    // console.log(buk);
-
     this.store.dispatch(editTask({index:index, upadateTask: item, upadateExecution: upadateExecution  }))
+
+    console.log('12212121');
+    // this.modifiedExecution.setValue('done')
+    // console.log(this.modifiedExecution.value);
+
+
   }
 
 
