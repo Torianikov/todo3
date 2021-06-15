@@ -5,8 +5,9 @@ import {
   createSelector,
   MetaReducer
 } from '@ngrx/store';
-import { environment } from '../../environments/environment';
-import { taskReducer, TaskState } from './task';
+import { environment } from '../../../environments/environment';
+import { taskReducer } from '../reducers/task.reducers';
+import { TaskState } from '../state/task.state'
 
 export interface State {
   task: TaskState

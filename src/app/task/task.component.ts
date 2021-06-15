@@ -1,10 +1,12 @@
-import { Component, OnInit, Inject  } from '@angular/core';
+import { Component, OnInit, Inject} from '@angular/core';
 import { Store } from '@ngrx/store';
-import { addTask, clear, deleteTask, editTask, taskSelector, } from '../reducers/task';
+// import { addTask, clear, deleteTask, editTask, taskSelector, } from '../reducers/task';
+import { add, clear, deleteOne, edit} from '../store/actions/task.action';
+import { taskSelector } from '../store/selectors/task.selectors';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {FormGroup, FormControl, FormArray, FormBuilder} from '@angular/forms'
-import { Observable } from 'rxjs';
-import {Task} from '../model/tast'
+import {FormGroup, FormControl, FormArray, FormBuilder} from '@angular/forms';
+import {  Observable, from  } from 'rxjs';
+import {Task} from '../model/tast';
 
 
 export interface DialogData {
@@ -19,20 +21,14 @@ export interface DialogData {
   styleUrls: ['./task.component.css']
 })
 
-export class TaskComponent implements OnInit {
+export class TaskComponent implements OnInit{
 
-  // execuionForm = new FormGroup({
-  //   not_performed: new FormControl(),
-  // });
+  
 
-  // aaaaa = new FormControl();
+  arrModified: FormArray;
+  groupModified: FormGroup;
 
-  // exe_arr= new FormArray();
-
-  modifiedToDo: FormGroup;
-
-  // modifiedExecution = new FormControl();
-
+  stopwatch;
 
   text: string;
   vibor: string;
@@ -43,21 +39,35 @@ export class TaskComponent implements OnInit {
 
   arrTask$: Observable<Task[]> = this.store.select(taskSelector);
 
+  
+
   execuionClient: string;
 
   constructor(private store: Store, public dialog: MatDialog, private fb: FormBuilder ) { 
-    // this.modifiedToDo = this.fb.group({
-    //   modifiedText: '',
-    //   modifiedExecution: this.fb.array([]), 
+
+    // this.groupModified = this.fb.group({
+    //   arrModified: this.fb.array([]) ,
     // });
+
+    this.arrModified = this.fb.array([])
+
+    
+
   }
 
-// get modifiedExecution() : FormArray {
-//   return this.modifiedToDo.get("modifiedExecution") as FormArray
-// }
+  // get arrModified() : FormArray {
+  //   return this.groupModified.get("arrModified") as FormArray
+  // }
 
 
-
+  upgrateArr(text, exe): FormGroup {
+    
+    return this.fb.group({
+      text: text,
+      exp: exe,
+    })
+  }
+  
   openDialog(): void {
 
     const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
@@ -68,17 +78,20 @@ export class TaskComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
 
-      this.store.dispatch(addTask({textNewTask: result.text, executionClient: result.selectRankExport }));
+      // this.arrModified.push(this.upgrateArr(result.text, result.selectRankExport))
+
+      this.store.dispatch(add({textNewTask: result.text, executionClient: result.selectRankExport }));
+      console.log(this.arrModified);
 
     });
   }
 
-  // what(){
-  //   console.log(this.execuionForm.value);
-  //   console.log(this.aaaaa.value)
-  // }
 
   ngOnInit(): void {
+
+    this.arrTask$.subscribe(data => data.map(v => this.arrModified.push(this.upgrateArr(v.text, v.execution))));
+
+  
 
   }
 
@@ -92,26 +105,24 @@ export class TaskComponent implements OnInit {
 
   deleteTask(index){
 
-    this.store.dispatch(deleteTask({index: index}));
+    this.store.dispatch(deleteOne({index: index}));
 
   }
 
-  edit(index, item, b1, b2, b3){
+  edit(){
 
-    let upadateExecution;
-    console.log(b1 + ' ' + b2 + ' ' + b3)
-    if(b1) upadateExecution = 'not_performed';
-    if(b2) upadateExecution = 'doing';
-    if(b3) upadateExecution = 'done';
-    this.store.dispatch(editTask({index:index, upadateTask: item, upadateExecution: upadateExecution  }))
+    // let upadateExecution;
+    // console.log(b1 + ' ' + b2 + ' ' + b3)
+    // if(b1) upadateExecution = 'not_performed';
+    // if(b2) upadateExecution = 'doing';
+    // if(b3) upadateExecution = 'done';
+    // this.store.dispatch(edit({index:index, upadateTask: item, upadateExecution: upadateExecution  }))
 
     console.log('12212121');
     // this.modifiedExecution.setValue('done')
     // console.log(this.modifiedExecution.value);
 
-
   }
-
 
 
 }

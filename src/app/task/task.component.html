@@ -3,9 +3,9 @@
     <!-- <div class = 'task'>one task</div> -->
 
     <div class ='task' *ngFor="let item of arrTask$ | async; let i = index">
-        <input [value]= "item.text" #tasktext>
-        <!-- <input matInput  [value]= "item.text" #tasktext> -->
-
+        <!-- <input [value]= "item.text" #tasktext> -->
+        <input matInput  [value]= "item.text" #tasktext>
+<!-- 
         <input #but_1 type="radio" name="execution_client{{i}}" id="not_performed_client{{i}}" value="not_performed"  [attr.checked]="(item.execution) == 'not_performed'? '' : null ">
         <label for="not_performed_client">Not Performed</label>
 
@@ -13,17 +13,17 @@
         <label for="doing_client">Doing</label>
 
         <input #but_3 type="radio" name="execution_client{{i}}" id="done_client{{i}}" value="done"  [attr.checked]="(item.execution) == 'done' ? '' : null" >
-        <label for="done_client">Done</label>
+        <label for="done_client">Done</label> -->
 
-        <!-- <mat-radio-group aria-label="Select an option" [formControl]= 'modifiedExecution' >
+        <mat-radio-group aria-label="Select an option">
           <mat-radio-button value="not_performed" >Not Performed</mat-radio-button>
           <mat-radio-button value="doing">Doing</mat-radio-button>
           <mat-radio-button value="done" >Done</mat-radio-button>
-        </mat-radio-group> -->
+        </mat-radio-group>
 
           <button (click)='deleteTask(item.id)'>x</button>
-          <!-- <button (click)='edit()'>&#10003;</button> -->
-          <button (click)='edit(item.id, tasktext.value, but_1.checked, but_2.checked, but_3.checked)'>&#10003;</button>
+          <button (click)='edit()'>&#10003;</button>
+          <!-- <button (click)='edit(item.id, tasktext.value, but_1.checked, but_2.checked, but_3.checked)'>&#10003;</button> -->
       </div>
 </div>
 
