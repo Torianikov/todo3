@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject} from '@angular/core';
+import { Component, OnInit, Inject,  } from '@angular/core';
 import { Store } from '@ngrx/store';
 // import { addTask, clear, deleteTask, editTask, taskSelector, } from '../reducers/task';
 import { add, clear, deleteOne, edit} from '../store/actions/task.action';
@@ -60,11 +60,11 @@ export class TaskComponent implements OnInit{
   // }
 
 
-  upgrateArr(text, exe): FormGroup {
+  upgrateArr(text, execution): FormGroup {
     
     return this.fb.group({
       text: text,
-      exp: exe,
+      execution: execution,
     })
   }
   
@@ -81,7 +81,7 @@ export class TaskComponent implements OnInit{
       // this.arrModified.push(this.upgrateArr(result.text, result.selectRankExport))
 
       this.store.dispatch(add({textNewTask: result.text, executionClient: result.selectRankExport }));
-      console.log(this.arrModified);
+      console.log(this.arrModified.controls[0]);
 
     });
   }
@@ -89,9 +89,8 @@ export class TaskComponent implements OnInit{
 
   ngOnInit(): void {
 
-    this.arrTask$.subscribe(data => data.map(v => this.arrModified.push(this.upgrateArr(v.text, v.execution))));
-
-  
+    // this.arrTask$.subscribe(data => this.arrModified.push(this.upgrateArr(data[data.length-1].text, data[data.length-1])));
+    this.arrTask$.subscribe(data => data.length-1 === -1 ? console.log('potok pyst') : this.arrModified.push(this.upgrateArr(data[data.length-1].text, data[data.length-1].execution)) );
 
   }
 
@@ -123,7 +122,6 @@ export class TaskComponent implements OnInit{
     // console.log(this.modifiedExecution.value);
 
   }
-
 
 }
 
