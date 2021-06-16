@@ -1,33 +1,20 @@
-
-<div class="container" #container>
+<mat-card class ="task" *ngFor="let item of arrModified.controls; let i = index">
     
-    <!-- <div class ='task' *ngFor="let item of arrTask$ | async; let i = index"> -->
-      <div class ='task' *ngFor="let item of arrModified.controls; let i = index">
-        <!-- <input [value]= "item.text" #tasktext> -->
-        <input matInput [value]="item.value.text"  #tasktext>
-<!-- 
-        <input #but_1 type="radio" name="execution_client{{i}}" id="not_performed_client{{i}}" value="not_performed"  [attr.checked]="(item.execution) == 'not_performed'? '' : null ">
-        <label for="not_performed_client">Not Performed</label>
+  <input matInput [value]="item.value.text"  #tasktext>
 
-        <input #but_2 type="radio" name="execution_client{{i}}" id="doing_client{{i}}" value="doing"   [attr.checked]="(item.execution) == 'doing' ? '' : null" >
-        <label for="doing_client">Doing</label>
+  <mat-radio-group aria-label="Select an option" [value]="item.value.execution" >
+    <mat-radio-button name="execution_client{{i}}" id="not_performed_client{{i}}" value="not_performed" >Not Performed</mat-radio-button>
+    <mat-radio-button name="execution_client{{i}}" id="doing_client{{i}}" value="doing">Doing</mat-radio-button>
+    <mat-radio-button name="execution_client{{i}}" id="done_client{{i}}" value="done" >Done</mat-radio-button>
+  </mat-radio-group>
 
-        <input #but_3 type="radio" name="execution_client{{i}}" id="done_client{{i}}" value="done"  [attr.checked]="(item.execution) == 'done' ? '' : null" >
-        <label for="done_client">Done</label> -->
+  <button mat-mini-fab color="warn" (click)="deleteTask(item.value.index)">x</button>
+  <button mat-mini-fab color="primary" (click)="edit(item.value.index, tasktext.value, item.value.execution)">&#10003;</button>
+   
+</mat-card>
 
-        <mat-radio-group aria-label="Select an option" [value]='item.value.execution'>
-          <mat-radio-button name="execution_client{{i}}" id="not_performed_client{{i}}" value="not_performed" >Not Performed</mat-radio-button>
-          <mat-radio-button ame="execution_client{{i}}" id="doing_client{{i}}" value="doing">Doing</mat-radio-button>
-          <mat-radio-button name="execution_client{{i}}" id="done_client{{i}}" value="done" >Done</mat-radio-button>
-        </mat-radio-group>
-
-          <button (click)='deleteTask(item.id)'>x</button>
-          <button (click)='edit()'>&#10003;</button>
-          <!-- <button (click)='edit(item.id, tasktext.value, but_1.checked, but_2.checked, but_3.checked)'>&#10003;</button> -->
-      </div>
-</div>
 
 <button mat-raised-button (click)="openDialog()">Add new task</button>
-<button mat-raised-button (click)='clear()'>clear</button>
+<button mat-raised-button (click)="clear()">clear</button>
 
 

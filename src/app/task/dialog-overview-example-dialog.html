@@ -6,7 +6,7 @@
     <input matInput placeholder="Add new task" [(ngModel)]='data.text'>
   </mat-form-field>
 
-  <mat-radio-group aria-label="Select an option" [(ngModel)]='data.selectRankExport'>
+  <mat-radio-group aria-label="Select an option" [(ngModel)]='data.selectExecution'>
     <mat-radio-button value="not_performed">Not Performed</mat-radio-button>
     <mat-radio-button value="doing">Doing</mat-radio-button>
     <mat-radio-button value="done">Done</mat-radio-button>
@@ -14,7 +14,6 @@
 
 </div>
 <div mat-dialog-actions>
-  <!-- <button mat-button (click)="onNoClick()">No Thanks</button> -->
   <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
 </div>
 

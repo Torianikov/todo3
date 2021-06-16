@@ -11,8 +11,7 @@ import {Task} from '../model/tast';
 
 export interface DialogData {
   text: string;
-  vibor: string;
-  selectRankExport: string;
+  selectExecution: string;
 }
 
 @Component({
@@ -23,46 +22,33 @@ export interface DialogData {
 
 export class TaskComponent implements OnInit{
 
-  
-
   arrModified: FormArray;
-  groupModified: FormGroup;
-
-  stopwatch;
 
   text: string;
-  vibor: string;
-  selectRankExport: string;
-  buk: string
-
+  selectExecution: string;
   textNewTask: string;
 
   arrTask$: Observable<Task[]> = this.store.select(taskSelector);
-
   
-
-  execuionClient: string;
 
   constructor(private store: Store, public dialog: MatDialog, private fb: FormBuilder ) { 
 
-    // this.groupModified = this.fb.group({
-    //   arrModified: this.fb.array([]) ,
-    // });
-
     this.arrModified = this.fb.array([])
-
-    
 
   }
 
-  // get arrModified() : FormArray {
-  //   return this.groupModified.get("arrModified") as FormArray
-  // }
+  ngOnInit(): void {
+
+    this.arrTask$.subscribe(data => data.length-1 === -1 ? console.log('potok pyst') : this.arrModified
+    .push(this.upgrateArr(data[data.length-1].id, data[data.length-1].text, data[data.length-1].execution)) );
+
+  }
 
 
-  upgrateArr(text, execution): FormGroup {
+  upgrateArr(index, text, execution): FormGroup {
     
     return this.fb.group({
+      index: index,
       text: text,
       execution: execution,
     })
@@ -72,54 +58,45 @@ export class TaskComponent implements OnInit{
 
     const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
       width: '550px',
-      data: {text: this.text, vibor:this.vibor, selectRankExport: this.selectRankExport }
+      data: {text: this.text, selectExecution: this.selectExecution }
 
     });
 
     dialogRef.afterClosed().subscribe(result => {
 
-      // this.arrModified.push(this.upgrateArr(result.text, result.selectRankExport))
-
-      this.store.dispatch(add({textNewTask: result.text, executionClient: result.selectRankExport }));
-      console.log(this.arrModified.controls[0]);
-
+      this.store.dispatch(add({textNewTask: result.text, executionClient: result.selectExecution }));
+      // this.arrTask$.subscribe(data => data.length-1 === -1 ? console.log('potok pyst') : this.arrModified.push(this.upgrateArr(data[data.length-1].id, data[data.length-1].text, data[data.length-1].execution)) );
+   
     });
   }
-
-
-  ngOnInit(): void {
-
-    // this.arrTask$.subscribe(data => this.arrModified.push(this.upgrateArr(data[data.length-1].text, data[data.length-1])));
-    this.arrTask$.subscribe(data => data.length-1 === -1 ? console.log('potok pyst') : this.arrModified.push(this.upgrateArr(data[data.length-1].text, data[data.length-1].execution)) );
-
-  }
-
 
   clear(){
 
     this.store.dispatch(clear());
+    this.arrModified.clear();
     this.textNewTask = '';
+    // this.arrTask$.subscribe(data => this.arrModified.setValue(data))
 
   }
 
-  deleteTask(index){
+  deleteTask(id){
 
-    this.store.dispatch(deleteOne({index: index}));
-
+    this.store.dispatch(deleteOne({index: id}));
+    // console.log(this.arrModified.controls.map(v => v.value.index == id ? console.log(v.value.text) : console.log('neto')))
   }
 
-  edit(){
+  edit(id, txt, e){
 
-    // let upadateExecution;
-    // console.log(b1 + ' ' + b2 + ' ' + b3)
-    // if(b1) upadateExecution = 'not_performed';
-    // if(b2) upadateExecution = 'doing';
-    // if(b3) upadateExecution = 'done';
-    // this.store.dispatch(edit({index:index, upadateTask: item, upadateExecution: upadateExecution  }))
+    this.store.dispatch(edit({index:id, upadateTask: txt, upadateExecution: e  }))
+    
+    this.arrTask$.subscribe(data => this.arrModified.setValue(data));
+    console.log(this.arrModified)
 
-    console.log('12212121');
-    // this.modifiedExecution.setValue('done')
-    // console.log(this.modifiedExecution.value);
+    // (this.arrModified.getRawValue())[id].text = '2212'
+    // let a = this.arrModified.getRawValue();
+    // console.log(a);
+    // this.arrModified.patchValue(a[id].text = txt);
+    // console.log(this.arrModified)
 
   }
 
