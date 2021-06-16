@@ -1,4 +1,5 @@
-<mat-card class ="task" *ngFor="let item of arrModified.controls; let i = index">
+<mat-card [formGroup]="groupArr">
+<mat-card class ="task" *ngFor="let item of groupArr.controls; let i = index">
     
   <input matInput [value]="item.value.text"  #tasktext>
 
@@ -16,5 +17,7 @@
 
 <button mat-raised-button (click)="openDialog()">Add new task</button>
 <button mat-raised-button (click)="clear()">clear</button>
+</mat-card>
+
 
 

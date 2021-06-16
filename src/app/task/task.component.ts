@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject,  } from '@angular/core';
 import { Store } from '@ngrx/store';
-// import { addTask, clear, deleteTask, editTask, taskSelector, } from '../reducers/task';
 import { add, clear, deleteOne, edit} from '../store/actions/task.action';
 import { taskSelector } from '../store/selectors/task.selectors';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
@@ -22,10 +21,11 @@ export interface DialogData {
 
 export class TaskComponent implements OnInit{
 
-  arrModified: FormArray;
+  groupArr: FormGroup;
 
   text: string;
   selectExecution: string;
+  
   textNewTask: string;
 
   arrTask$: Observable<Task[]> = this.store.select(taskSelector);
@@ -33,24 +33,35 @@ export class TaskComponent implements OnInit{
 
   constructor(private store: Store, public dialog: MatDialog, private fb: FormBuilder ) { 
 
-    this.arrModified = this.fb.array([])
+    this.groupArr = this.fb.group({
+      streamArr : this.fb.array([
+        this.upgrateArr()
+      ])
+    })
 
   }
 
   ngOnInit(): void {
+  
+    const control = this.groupArr.get('streamArr') as FormArray;
+    // this.arrTask$.subscribe(data => data.length-1 === -1 ? console.log('potok pyst') :  control.push(this.upgrateArr(data[data.length-1].id, data[data.length-1].text, data[data.length-1].execution)) );
+    this.arrTask$.subscribe(data => control.patchValue(data));
+    // this.arrTask$.subscribe(data => console.log(data))
+    console.log(control.value)
+    
+  }
 
-    this.arrTask$.subscribe(data => data.length-1 === -1 ? console.log('potok pyst') : this.arrModified
-    .push(this.upgrateArr(data[data.length-1].id, data[data.length-1].text, data[data.length-1].execution)) );
-
+  getControls() {
+    return (this.groupArr.get('streamArr') as FormArray).controls;
   }
 
 
-  upgrateArr(index, text, execution): FormGroup {
+  upgrateArr(): FormGroup {
     
     return this.fb.group({
-      index: index,
-      text: text,
-      execution: execution,
+      id: new FormControl(),
+      text: new FormControl(),
+      execution: new FormControl(),
     })
   }
   
@@ -65,38 +76,28 @@ export class TaskComponent implements OnInit{
     dialogRef.afterClosed().subscribe(result => {
 
       this.store.dispatch(add({textNewTask: result.text, executionClient: result.selectExecution }));
-      // this.arrTask$.subscribe(data => data.length-1 === -1 ? console.log('potok pyst') : this.arrModified.push(this.upgrateArr(data[data.length-1].id, data[data.length-1].text, data[data.length-1].execution)) );
-   
+      console.log(this.groupArr.value)
+    
     });
   }
 
   clear(){
 
     this.store.dispatch(clear());
-    this.arrModified.clear();
+    // this.arrModified.clear();
     this.textNewTask = '';
-    // this.arrTask$.subscribe(data => this.arrModified.setValue(data))
 
   }
 
   deleteTask(id){
 
     this.store.dispatch(deleteOne({index: id}));
-    // console.log(this.arrModified.controls.map(v => v.value.index == id ? console.log(v.value.text) : console.log('neto')))
+
   }
 
   edit(id, txt, e){
 
     this.store.dispatch(edit({index:id, upadateTask: txt, upadateExecution: e  }))
-    
-    this.arrTask$.subscribe(data => this.arrModified.setValue(data));
-    console.log(this.arrModified)
-
-    // (this.arrModified.getRawValue())[id].text = '2212'
-    // let a = this.arrModified.getRawValue();
-    // console.log(a);
-    // this.arrModified.patchValue(a[id].text = txt);
-    // console.log(this.arrModified)
 
   }
 
