@@ -1,22 +1,8 @@
-
-.task{
-    
-    display: flex;
-    border: 1px solid black;
-    
+.task {
+  display: flex;
+  border: 1px solid black;
 }
 
-input{
-    
-    flex-grow: 1;
+input {
+  flex-grow: 1;
 }
-
-.execution{
-    padding-top: 3% ;
-    padding-bottom: 3%;
-}
-
-.a{
-    display: flex;
-}
-

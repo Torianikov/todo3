@@ -23,6 +23,7 @@ export class TaskComponent implements OnInit {
   text: string;
   selectExecution: string;
   textNewTask: string;
+  imeid: number;
 
   constructor(
     private store: Store,
@@ -30,20 +31,34 @@ export class TaskComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.groupArr = this.fb.group({
-      streamArr: this.fb.array([this.upgrateArr()]),
+      streamArr: this.fb.array([this.upgrateArr()])
     });
   }
 
   ngOnInit(): void {
+    let a = 0;
     const control = this.groupArr.get('streamArr') as FormArray;
-    this.arrTask$.subscribe((data) => control.patchValue(data));
-    // this.arrTask$.subscribe((data) => console.log(data));
-    // this.arrTask$.subscribe(data => data.length-1 === -1 ? console.log('potok pyst') :  control.push(this.upgrateArr(data[data.length-1].id, data[data.length-1].text, data[data.length-1].execution)) );
-    // this.arrTask$.subscribe((data, i=0) => data.length-1 === -1 ? console.log('potok pyst') : control.patchValue(data[i]))
+    this.arrTask$.subscribe(data => {
+      
+      if(data.length === 0){
+        control.controls = [];
+      }
+
+      if(data.length > control.length) {
+        control.push(this.upgrateArr());
+      }
+
+      if(data.length < control.length){
+        // control.removeAt(this.imeid);
+        // control.controls.filter((item) => item.id !== a);
+      }
+
+      control.patchValue(data);
+      // console.log(this.imeid)
+    });
   }
 
   getControls() {
-    // console.log(this.groupArr.get('streamArr') as FormArray)
     return (this.groupArr.get('streamArr') as FormArray).controls;
   }
 
@@ -63,28 +78,24 @@ export class TaskComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       this.store.dispatch(add({ textNewTask: result.text, executionClient: result.selectExecution }));
-      const control = this.groupArr.get('streamArr') as FormArray;
-      control.push(this.upgrateArr());
-      control.value.pop();
-      // console.log(this.groupArr.value);
     });
   }
 
   clear() {
     this.store.dispatch(clear());
     this.textNewTask = '';
-    const control = this.groupArr.get('streamArr') as FormArray;
-    console.log(control);
   }
 
   deleteTask(id) {
     this.store.dispatch(deleteOne({ index: id }));
+    this.imeid = id;
+    console.log(`valllll: ${this.imeid}`)
+    return this.imeid;
   }
 
   edit(id, txt, e) {
-    this.store.dispatch(
-      edit({ index: id, upadateTask: txt, upadateExecution: e })
-    );
+    console.log(`id: ${id} txt: ${txt} e: ${e}`);
+    this.store.dispatch(edit({ index: id, upadateTask: txt, upadateExecution: e }));
   }
 }
 
