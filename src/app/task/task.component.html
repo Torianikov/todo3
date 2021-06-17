@@ -1,22 +1,24 @@
 <mat-card [formGroup]="groupArr">
-<mat-card class ="task" *ngFor="let item of groupArr.controls; let i = index">
-    
-  <input matInput [value]="item.value.text"  #tasktext>
+  <ng-container formArrayName="streamArr">
+    <mat-card class ="task" *ngFor="let item of getControls(); let i = index">
+      <ng-container [formGroupName]="i">
+        <input matInput formControlName="text"  #tasktext>
 
-  <mat-radio-group aria-label="Select an option" [value]="item.value.execution" >
-    <mat-radio-button name="execution_client{{i}}" id="not_performed_client{{i}}" value="not_performed" >Not Performed</mat-radio-button>
-    <mat-radio-button name="execution_client{{i}}" id="doing_client{{i}}" value="doing">Doing</mat-radio-button>
-    <mat-radio-button name="execution_client{{i}}" id="done_client{{i}}" value="done" >Done</mat-radio-button>
-  </mat-radio-group>
+        <mat-radio-group aria-label="Select an option" formControlName='execution' >
+          <mat-radio-button name="execution_client{{i}}" id="not_performed_client{{i}}" value="not_performed" >Not Performed</mat-radio-button>
+          <mat-radio-button name="execution_client{{i}}" id="doing_client{{i}}" value="doing">Doing</mat-radio-button>
+          <mat-radio-button name="execution_client{{i}}" id="done_client{{i}}" value="done" >Done</mat-radio-button>
+        </mat-radio-group>
 
-  <button mat-mini-fab color="warn" (click)="deleteTask(item.value.index)">x</button>
-  <button mat-mini-fab color="primary" (click)="edit(item.value.index, tasktext.value, item.value.execution)">&#10003;</button>
-   
-</mat-card>
+        <button mat-mini-fab color="warn" (click)="deleteTask(item.value.index)">x</button>
+        <button mat-mini-fab color="primary" (click)="edit(item.value.index, tasktext.value, item.value.execution)">&#10003;</button>
+     </ng-container>
+    </mat-card>
 
 
-<button mat-raised-button (click)="openDialog()">Add new task</button>
-<button mat-raised-button (click)="clear()">clear</button>
+    <button mat-raised-button (click)="openDialog()">Add new task</button>
+    <button mat-raised-button (click)="clear()">clear</button>
+  </ng-container>
 </mat-card>
 
 

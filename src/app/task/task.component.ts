@@ -1,12 +1,11 @@
-import { Component, OnInit, Inject,  } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { add, clear, deleteOne, edit} from '../store/actions/task.action';
+import { add, clear, deleteOne, edit } from '../store/actions/task.action';
 import { taskSelector } from '../store/selectors/task.selectors';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {FormGroup, FormControl, FormArray, FormBuilder} from '@angular/forms';
-import {  Observable, from  } from 'rxjs';
-import {Task} from '../model/tast';
-
+import {  MatDialog, MatDialogRef,MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormGroup, FormControl, FormArray, FormBuilder } from '@angular/forms';
+import { Observable, from } from 'rxjs';
+import { Task } from '../model/tast';
 
 export interface DialogData {
   text: string;
@@ -16,91 +15,77 @@ export interface DialogData {
 @Component({
   selector: 'app-task',
   templateUrl: './task.component.html',
-  styleUrls: ['./task.component.css']
+  styleUrls: ['./task.component.css'],
 })
-
-export class TaskComponent implements OnInit{
-
+export class TaskComponent implements OnInit {
+  arrTask$: Observable<Task[]> = this.store.select(taskSelector);
   groupArr: FormGroup;
-
   text: string;
   selectExecution: string;
-  
   textNewTask: string;
 
-  arrTask$: Observable<Task[]> = this.store.select(taskSelector);
-  
-
-  constructor(private store: Store, public dialog: MatDialog, private fb: FormBuilder ) { 
-
+  constructor(
+    private store: Store,
+    public dialog: MatDialog,
+    private fb: FormBuilder
+  ) {
     this.groupArr = this.fb.group({
-      streamArr : this.fb.array([
-        this.upgrateArr()
-      ])
-    })
-
+      streamArr: this.fb.array([this.upgrateArr()]),
+    });
   }
 
   ngOnInit(): void {
-  
     const control = this.groupArr.get('streamArr') as FormArray;
+    this.arrTask$.subscribe((data) => control.patchValue(data));
+    // this.arrTask$.subscribe((data) => console.log(data));
     // this.arrTask$.subscribe(data => data.length-1 === -1 ? console.log('potok pyst') :  control.push(this.upgrateArr(data[data.length-1].id, data[data.length-1].text, data[data.length-1].execution)) );
-    this.arrTask$.subscribe(data => control.patchValue(data));
-    // this.arrTask$.subscribe(data => console.log(data))
-    console.log(control.value)
-    
+    // this.arrTask$.subscribe((data, i=0) => data.length-1 === -1 ? console.log('potok pyst') : control.patchValue(data[i]))
   }
 
   getControls() {
+    // console.log(this.groupArr.get('streamArr') as FormArray)
     return (this.groupArr.get('streamArr') as FormArray).controls;
   }
 
-
   upgrateArr(): FormGroup {
-    
     return this.fb.group({
       id: new FormControl(),
       text: new FormControl(),
       execution: new FormControl(),
-    })
+    });
   }
-  
-  openDialog(): void {
 
+  openDialog(): void {
     const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
       width: '550px',
-      data: {text: this.text, selectExecution: this.selectExecution }
-
+      data: { text: this.text, selectExecution: this.selectExecution },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-
-      this.store.dispatch(add({textNewTask: result.text, executionClient: result.selectExecution }));
-      console.log(this.groupArr.value)
-    
+    dialogRef.afterClosed().subscribe((result) => {
+      this.store.dispatch(add({ textNewTask: result.text, executionClient: result.selectExecution }));
+      const control = this.groupArr.get('streamArr') as FormArray;
+      control.push(this.upgrateArr());
+      control.value.pop();
+      // console.log(this.groupArr.value);
     });
   }
 
-  clear(){
-
+  clear() {
     this.store.dispatch(clear());
-    // this.arrModified.clear();
     this.textNewTask = '';
-
+    const control = this.groupArr.get('streamArr') as FormArray;
+    console.log(control);
   }
 
-  deleteTask(id){
-
-    this.store.dispatch(deleteOne({index: id}));
-
+  deleteTask(id) {
+    this.store.dispatch(deleteOne({ index: id }));
   }
 
-  edit(id, txt, e){
-
-    this.store.dispatch(edit({index:id, upadateTask: txt, upadateExecution: e  }))
-
+  edit(id, txt, e) {
+    this.store.dispatch(
+      edit({ index: id, upadateTask: txt, upadateExecution: e })
+    );
   }
-
 }
 
 @Component({
@@ -108,13 +93,12 @@ export class TaskComponent implements OnInit{
   templateUrl: 'dialog-overview-example-dialog.html',
 })
 export class DialogOverviewExampleDialog {
-
   constructor(
     public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+    @Inject(MAT_DIALOG_DATA) public data: DialogData
+  ) {}
 
   onNoClick(): void {
     this.dialogRef.close();
   }
-
 }
