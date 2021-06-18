@@ -36,7 +36,7 @@ export class TaskComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let a = 0;
+    // let a = 1;
     const control = this.groupArr.get('streamArr') as FormArray;
     this.arrTask$.subscribe(data => {
       
@@ -48,13 +48,13 @@ export class TaskComponent implements OnInit {
         control.push(this.upgrateArr());
       }
 
-      if(data.length < control.length){
-        // control.removeAt(this.imeid);
-        // control.controls.filter((item) => item.id !== a);
+      if (data.length < control.length) {
+        console.log(this.imeid);
+        control.removeAt(this.imeid);
       }
 
       control.patchValue(data);
-      // console.log(this.imeid)
+      // console.log(control.value)
     });
   }
 
@@ -89,12 +89,12 @@ export class TaskComponent implements OnInit {
   deleteTask(id) {
     this.store.dispatch(deleteOne({ index: id }));
     this.imeid = id;
-    console.log(`valllll: ${this.imeid}`)
+    // console.log(`valllll: ${this.imeid}`)
     return this.imeid;
   }
 
   edit(id, txt, e) {
-    console.log(`id: ${id} txt: ${txt} e: ${e}`);
+    // console.log(`id: ${id} txt: ${txt} e: ${e}`);
     this.store.dispatch(edit({ index: id, upadateTask: txt, upadateExecution: e }));
   }
 }
