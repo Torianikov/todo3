@@ -1,11 +1,12 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { add, clear, deleteOne, edit } from '../store/actions/task.action';
 import { taskSelector } from '../store/selectors/task.selectors';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormControl, FormArray, FormBuilder, Validators } from '@angular/forms';
-import { Observable, from } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Task } from '../model/tast';
+import { DialogOverviewExampleDialog } from './dialog.task'
 
 export interface DialogData {
   text: string;
@@ -104,17 +105,17 @@ export class TaskComponent implements OnInit {
   }
 }
 
-@Component({
-  selector: 'dialog-overview-example-dialog',
-  templateUrl: 'dialog.task.html',
-})
-export class DialogOverviewExampleDialog {
-  constructor(
-    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) {}
+// @Component({
+//   selector: 'dialog-overview-example-dialog',
+//   templateUrl: 'dialog.task.html',
+// })
+// export class DialogOverviewExampleDialog {
+//   constructor(
+//     public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
+//     @Inject(MAT_DIALOG_DATA) public data: DialogData
+//   ) {}
 
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-}
+//   onNoClick(): void {
+//     this.dialogRef.close();
+//   }
+// }

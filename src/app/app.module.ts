@@ -9,7 +9,8 @@ import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { AppEffects } from './app.effects';
 import { HeaderComponent } from './header/header.component';
-import { TaskComponent, DialogOverviewExampleDialog } from './task/task.component';
+import { TaskComponent} from './task/task.component';
+import { DialogOverviewExampleDialog } from './task/dialog.task'
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
