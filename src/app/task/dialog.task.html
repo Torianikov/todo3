@@ -7,14 +7,14 @@
   </mat-form-field>
 
   <mat-radio-group aria-label="Select an option" [(ngModel)]='data.selectExecution'>
-    <mat-radio-button value="not_performed">Not Performed</mat-radio-button>
-    <mat-radio-button value="doing">Doing</mat-radio-button>
-    <mat-radio-button value="done">Done</mat-radio-button>
+    <mat-radio-button type="radio" value="not_performed">Not Performed</mat-radio-button>
+    <mat-radio-button type="radio" value="doing">Doing</mat-radio-button>
+    <mat-radio-button type="radio" value="done">Done</mat-radio-button>
   </mat-radio-group>
 
 </div>
 <div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+  <button mat-button [mat-dialog-close]="data" type="button" cdkFocusInitial>Ok</button>
 </div>
 
 

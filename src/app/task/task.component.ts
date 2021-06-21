@@ -24,11 +24,12 @@ export class TaskComponent implements OnInit {
   selectExecution: string;
   textNewTask: string;
   imeid: number;
+  validate: boolean = false;
 
   constructor(
     private store: Store,
     public dialog: MatDialog,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {
     this.groupArr = this.fb.group({
       streamArr: this.fb.array([this.upgrateArr()]),
@@ -48,13 +49,18 @@ export class TaskComponent implements OnInit {
       }
 
       if (data.length < control.length) {
-        console.log(this.imeid);
         control.removeAt(this.imeid);
+        console.log(this.imeid)
       }
       if (control.invalid) {
         control.removeAt(data.length - 1);
         this.deleteTask(data.length - 1);
+        this.validate = !this.validate
+        setTimeout(() => this.validate = !this.validate, 1000)
       }
+      console.log(control.value);
+      control.patchValue(data);
+
     });
   }
 
@@ -90,6 +96,7 @@ export class TaskComponent implements OnInit {
   deleteTask(id) {
     this.store.dispatch(deleteOne({ index: id }));
     this.imeid = id;
+    console.log(id);
   }
 
   edit(id, txt, e) {

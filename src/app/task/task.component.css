@@ -3,6 +3,11 @@
   border: 1px solid black;
 }
 
+.danger{
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
 input {
   flex-grow: 1;
 }

@@ -1,3 +1,4 @@
+<mat-card class="danger" *ngIf='validate'>You have not filled in all the fields </mat-card>
 <mat-card [formGroup]="groupArr">
   <ng-container formArrayName="streamArr">
     <mat-card class="task" *ngFor="let item of getControls(); let i = index">
@@ -5,18 +6,18 @@
         <input matInput formControlName="text"  #tasktext>
 
         <mat-radio-group aria-label="Select an option" formControlName='execution' >
-          <mat-radio-button name="execution_client{{i}}" id="not_performed_client{{i}}" value="not_performed" >Not Performed</mat-radio-button>
-          <mat-radio-button name="execution_client{{i}}" id="doing_client{{i}}" value="doing">Doing</mat-radio-button>
-          <mat-radio-button name="execution_client{{i}}" id="done_client{{i}}" value="done" >Done</mat-radio-button>
+          <mat-radio-button type="radio" name="execution_client{{i}}" id="not_performed_client{{i}}" value="not_performed" >Not Performed</mat-radio-button>
+          <mat-radio-button type="radio" name="execution_client{{i}}" id="doing_client{{i}}" value="doing">Doing</mat-radio-button>
+          <mat-radio-button type="radio" name="execution_client{{i}}" id="done_client{{i}}" value="done" >Done</mat-radio-button>
         </mat-radio-group>
 
-        <button mat-mini-fab color="warn" (click)="deleteTask(item.value.id)">x</button>
-        <button mat-mini-fab color="primary" (click)="edit(item.value.id, tasktext.value, item.value.execution)">&#10003;</button>
+        <button mat-mini-fab type="button" color="warn" (click)="deleteTask(item.value.id)">x</button>
+        <button mat-mini-fab type="button" color="primary" (click)="edit(item.value.id, tasktext.value, item.value.execution)">&#10003;</button>
      </ng-container>
     </mat-card>
 
-    <button mat-raised-button (click)="openDialog()">Add new task</button>
-    <button mat-raised-button (click)="clear()">clear</button>
+    <button mat-raised-button type="button" (click)="openDialog()">Add new task</button>
+    <button mat-raised-button type="button" (click)="clear()">clear</button>
 
   </ng-container>
 </mat-card>
